@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bloom & Bag — 3D Colorful Handbag Store</title>
+<meta name="description" content="Hand-finished colorful handbags in full-grain leather. Explore in 3D." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+
+<div class="topbar">
+  ✦ Free shipping over $150 · 30-day returns · Use code <strong>BLOOM10</strong> for 10% off ✦
+</div>
+
+<header>
+  <div class="wrap nav">
+    <a href="#" class="logo"><span class="dot"></span>Bloom &amp; Bag</a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#shop">Shop</a>
+      <a href="#categories">Collections</a>
+      <a href="#promo">Sale</a>
+      <a href="#reviews">Reviews</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="icon-btn burger" id="burger" aria-label="Menu">
+        <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <button class="icon-btn" id="wishBtn" aria-label="Wishlist">
+        <svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-9.2A4 4 0 0 1 12 8a4 4 0 0 1 7 2.8C19 15.6 12 20 12 20z"/></svg>
+        <span class="badge wish" id="wishCount">0</span>
+      </button>
+      <button class="icon-btn" id="cartBtn" aria-label="Cart">
+        <svg viewBox="0 0 24 24"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>
+        <span class="badge" id="cartCount">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- ================= HERO 3D ================= -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="blob b1"></div><div class="blob b2"></div>
+      <div class="blob b3"></div><div class="blob b4"></div>
+    </div>
+
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow"><span class="dot"></span>New Drop · The Color Edit</span>
+        <h1>Bags as <em class="grad-text">bold</em> as you are.</h1>
+        <p class="lead">
+          Hand-finished handbags in full-grain leather — in colors that make Monday
+          feel like Friday. Drag the bag to explore it in 3D.
+        </p>
+        <div class="hero-cta">
+          <a href="#shop" class="btn btn-primary">
+            Shop the collection
+            <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <button class="btn btn-ghost" id="replay3d">
+            <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+            Replay 3D
+          </button>
+        </div>
+        <div class="hero-stats">
+          <div><strong class="grad-text">12k+</strong><span>Happy carriers</span></div>
+          <div><strong class="grad-text">4.9★</strong><span>Average rating</span></div>
+          <div><strong class="grad-text">2yr</strong><span>Leather warranty</span></div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="canvas-shell">
+          <canvas id="heroCanvas"></canvas>
+          <div class="canvas-loader" id="canvasLoader">
+            <div class="spinner"></div>
+            <span>Loading 3D…</span>
+          </div>
+          <div class="canvas-hint" id="canvasHint">
+            <svg viewBox="0 0 24 24"><path d="M9 3v18M15 3v18"/><path d="M3 9h18M3 15h18"/></svg>
+            Drag to rotate
+          </div>
+        </div>
+        <div class="chip-float chip-1"><span class="pulse"></span><div><b>Full-grain</b><small>Italian leather</small></div></div>
+        <div class="chip-float chip-2"><span class="pulse"></span><div><b>Real-time 3D</b><small>WebGL powered</small></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MARQUEE ================= -->
+  <div class="marquee">
+    <div class="marquee-track">
+      <span>Free worldwide shipping</span><span>Hand-finished in small batches</span>
+      <span>30-day easy returns</span><span>Full-grain Italian leather</span>
+      <span>Free worldwide shipping</span><span>Hand-finished in small batches</span>
+      <span>30-day easy returns</span><span>Full-grain Italian leather</span>
+    </div>
+  </div>
+
+  <!-- ================= CATEGORIES ================= -->
+  <section id="categories">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow"><span class="dot"></span>Find your shape</span>
+        <h2>Shop by <span class="grad-text">collection</span></h2>
+        <p>Four silhouettes, endless colorways. Each one built around a real day.</p>
+      </div>
+      <div class="cats" id="catGrid"></div>
+    </div>
+  </section>
+
+  <!-- ================= SHOP ================= -->
+  <section id="shop" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow"><span class="dot"></span>The Color Edit</span>
+        <h2>Bestselling <span class="grad-text">bags</span></h2>
+        <p>Pieces our community keeps coming back to — restocked, never rushed.</p>
+      </div>
+
+      <div class="toolbar">
+        <div class="pills" id="filters"></div>
+        <div class="tool-right">
+          <div class="search-box">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+            <input type="text" id="searchInput" placeholder="Search bags…" aria-label="Search bags" />
+          </div>
+          <select class="sort" id="sortSelect" aria-label="Sort products">
+            <option value="featured">Featured</option>
+            <option value="low">Price: Low to High</option>
+            <option value="high">Price: High to Low</option>
+            <option value="rating">Top Rated</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid" id="productGrid"></div>
+    </div>
+  </section>
+
+  <!-- ================= PROMO ================= -->
+  <section id="promo" style="padding-top:0">
+    <div class="wrap">
+      <div class="promo">
+        <div>
+          <h2>Take 20% off your first bag.</h2>
+          <p>Join the list and we'll send a code straight to your inbox — plus early access to every new color drop.</p>
+          <a href="#newsletter" class="btn">Get my code
+            <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+        <div class="promo-visual">
+          <img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=700&q=80"
+               alt="Featured handbag" data-fallback="promo" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= REVIEWS ================= -->
+  <section id="reviews" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow"><span class="dot"></span>Kind words</span>
+        <h2>Loved in <span class="grad-text">40+ countries</span></h2>
+      </div>
+      <div class="quotes">
+        <div class="quote">
+          <div class="stars">★★★★★</div>
+          <p>"The Lumière has replaced three bags in my closet. It fits my laptop, my life, and somehow still looks elegant at dinner."</p>
+          <div class="who"><div class="avatar" style="background:var(--grad)">S</div><div><b>Sofia M.</b><small>Lisbon, PT</small></div></div>
+        </div>
+        <div class="quote">
+          <div class="stars">★★★★★</div>
+          <p>"Six months of daily use and the leather has only gotten better. You can feel the difference the moment you pick it up."</p>
+          <div class="who"><div class="avatar" style="background:var(--grad-warm)">A</div><div><b>Amara K.</b><small>London, UK</small></div></div>
+        </div>
+        <div class="quote">
+          <div class="stars">★★★★★</div>
+          <p>"Bought the Odette Mini as a gift and ended up ordering one for myself a week later. The colors are unreal."</p>
+          <div class="who"><div class="avatar" style="background:linear-gradient(120deg,var(--teal),var(--blue))">R</div><div><b>Rhea T.</b><small>Toronto, CA</small></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= NEWSLETTER ================= -->
+  <section id="newsletter" style="padding-top:0">
+    <div class="wrap">
+      <div class="news">
+        <span class="eyebrow"><span class="dot"></span>Join the list</span>
+        <h2>First access to new <span class="grad-text">color drops</span></h2>
+        <p>Early releases, atelier stories, and 20% off your first bag.</p>
+        <form id="newsForm">
+          <input type="email" placeholder="Your email address" required aria-label="Email address" />
+          <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
+        <p class="note">No noise. Unsubscribe whenever you like.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="logo"><span class="dot"></span>Bloom &amp; Bag</div>
+        <p>Colorful handbags, hand-finished in small batches. Made to be carried — and kept — for years.</p>
+        <div class="socials">
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg></a>
+          <a href="#" aria-label="Pinterest"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0-3.3 17.4c-.1-.8-.2-2 0-2.9l1.2-5s-.3-.6-.3-1.5c0-1.4.8-2.4 1.8-2.4.9 0 1.3.6 1.3 1.4 0 .9-.6 2.2-.9 3.4-.2 1 .5 1.9 1.6 1.9 1.9 0 3.3-2 3.3-4.9 0-2.6-1.8-4.4-4.4-4.4-3 0-4.8 2.2-4.8 4.6 0 .9.3 1.9.8 2.4"/></svg></a>
+          <a href="#" aria-label="TikTok"><svg viewBox="0 0 24 24"><path d="M15 4v9.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M15 4c.4 2.2 1.9 3.6 4 3.8"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="#shop">All bags</a></li>
+          <li><a href="#categories">Totes</a></li>
+          <li><a href="#categories">Shoulder bags</a></li>
+          <li><a href="#categories">Mini &amp; clutches</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Help</h4>
+        <ul>
+          <li><a href="#">Shipping &amp; returns</a></li>
+          <li><a href="#">Leather care</a></li>
+          <li><a href="#">Warranty</a></li>
+          <li><a href="#">Contact us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Atelier</h4>
+        <ul>
+          <li><a href="#">Our craft</a></li>
+          <li><a href="#">Sustainability</a></li>
+          <li><a href="#">Stockists</a></li>
+          <li><a href="#">Careers</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Bloom &amp; Bag. Demo store — no real orders processed.</span>
+      <span>Privacy · Terms · Cookies</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ OVERLAY ============ -->
+<div class="overlay" id="overlay"></div>
+
+<!-- ============ CART DRAWER ============ -->
+<aside class="drawer" id="drawer" aria-label="Shopping cart">
+  <div class="drawer-head">
+    <div>
+      <h3>Your bag</h3>
+      <small id="drawerCount">0 items</small>
+    </div>
+    <button class="close-x" id="closeCart" aria-label="Close cart">
+      <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+  <div class="drawer-foot">
+    <div id="promoArea"></div>
+    <div id="totalsArea"></div>
+    <button class="btn btn-primary" id="checkoutBtn">Checkout</button>
+  </div>
+</aside>
+
+<!-- ============ PRODUCT MODAL ============ -->
+<div class="modal-wrap" id="productModal">
+  <div class="modal">
+    <button class="modal-close" id="closeProduct" aria-label="Close">
+      <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="pm-grid" id="pmContent"></div>
+  </div>
+</div>
+
+<!-- ============ CHECKOUT MODAL ============ -->
+<div class="modal-wrap" id="checkoutModal">
+  <div class="modal checkout">
+    <button class="modal-close" id="closeCheckout" aria-label="Close">
+      <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="co-head">
+      <h2>Checkout</h2>
+      <div class="co-steps" id="coSteps">
+        <div class="step-dot active" data-step="1"><i>1</i>Shipping</div>
+        <div class="step-line"></div>
+        <div class="step-dot" data-step="2"><i>2</i>Payment</div>
+        <div class="step-line"></div>
+        <div class="step-dot" data-step="3"><i>3</i>Done</div>
+      </div>
+    </div>
+    <div class="co-body" id="coBody"></div>
+  </div>
+</div>
+
+<!-- ============ TOAST ============ -->
+<div class="toast" id="toast"><span class="dot"></span><span id="toastMsg">Added to your bag</span></div>
+
+<!-- ============ SCRIPTS ============ -->
+<script src="js/data.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/checkout.js"></script>
+<script src="js/app.js"></script>
+<script type="module" src="js/three-scene.js"></script>
+</body>
+</html>
